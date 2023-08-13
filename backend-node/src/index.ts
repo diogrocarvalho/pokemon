@@ -4,10 +4,13 @@ import connectDB from './config/db.js';
 import { Pokemon } from './model/pokemon.js';
 
 import axios from 'axios';
+import cors from 'cors';
+import { PokemonType } from './model/pokemonType.js';
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 const app: Express = express();
 app.use(express.json());
+app.use(cors());
 
 connectDB();
 
@@ -89,4 +92,60 @@ app.delete('/pokemon/:id', async (request: Request, response: Response) => {
       message: err.message || 'Some error occurred while retrieving tutorials.',
     });
   }
+});
+
+//
+app.get('/type/:id', (request: Request, response: Response) => {
+  const id = request.params.id;
+  var condition = id ? { id } : {};
+
+  PokemonType.find()
+    .then(async (data) => {
+      if (!data[0]) {
+        const url = `${process.env.POKE_API_URL}type`;
+        const types = (await axios.get(url)).data.results;
+
+        //Mapping types
+        try {
+          console.log(types);
+          types.forEach(async (type: { name: string; url: string }) => {
+            const pokemonType = new PokemonType({
+              name: type.name,
+              url: type.url,
+            });
+            console.log(`trying to save ${type.name} on database...`);
+            await pokemonType.save();
+            console.log(`${type.name} saved on database...`);
+          });
+          response.send(types);
+        } catch {
+          throw new Error('cant find type');
+        }
+      } else {
+        response.send(data);
+      }
+    })
+    .catch((err) => {
+      response.status(500).send({
+        message:
+          err.message || 'Some error occurred while retrieving tutorials.',
+      });
+    });
+});
+
+app.get('/type', (request: Request, response: Response) => {
+  const name = request.query.name;
+  var condition = name ? { name } : {};
+
+  PokemonType.find(condition)
+    .sort({ id: 1 })
+    .then(async (data) => {
+      response.send(data);
+    })
+    .catch((err) => {
+      response.status(500).send({
+        message:
+          err.message || 'Some error occurred while retrieving tutorials.',
+      });
+    });
 });
