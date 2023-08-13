@@ -1,17 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const POKEMON_TYPES = ["FIRE", "WATER", "GRASS", "ELECTRIC"];
 const SearchParams = () => {
   const [name, setName] = useState("");
+  const [pokemonTypes, setPokemonTypes] = useState([]);
   const [selectedPokemonType, setSelectedPokemonType] = useState("");
 
+  useEffect(() => {
+    const getTypes = async () => {
+      const response = await fetch("http://localhost:5000/type");
+      const types = await response.json();
+      setPokemonTypes(types);
+    };
+    getTypes();
+  }, []);
+
   function onChangeSelectedPokemonType(value) {
-    setSelectedPokemonType(value || "");
+    console.log("see", value);
+    setSelectedPokemonType(value);
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    console.log("hahah", selectedPokemonType);
   }
 
   return (
     <div className="search-params">
-      <form>
+      <form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>
         <input
           id="name"
@@ -28,9 +43,9 @@ const SearchParams = () => {
           onChange={(e) => onChangeSelectedPokemonType(e.target.value)}
         >
           <option>Select a pokemon type</option>
-          {POKEMON_TYPES.map((type) => (
-            <option key={type} value={type}>
-              {type}
+          {pokemonTypes.map((type) => (
+            <option key={type._id} value={type.id}>
+              {type.name}
             </option>
           ))}
         </select>
