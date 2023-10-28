@@ -5,6 +5,7 @@ import { Pokemon } from './model/pokemon.js';
 
 import axios from 'axios';
 import cors from 'cors';
+import { FilterQuery } from 'mongoose';
 import { PokemonType } from './model/pokemonType.js';
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -19,13 +20,35 @@ app.listen(PORT, () =>
   console.log(`Server running at http://localhost:${PORT}`)
 );
 
+function getPokemonFiltersByQueryParams(
+  query: any
+): FilterQuery<typeof Pokemon> {
+  const { name, id, type } = query;
+  const filter: any = {};
+
+  if (name?.length) {
+    filter.name = { $regex: new RegExp(name + '', 'i') };
+  }
+
+  if (id) {
+    filter.id = id;
+  }
+
+  const parsedType = Number(type);
+
+  if (type && !isNaN(parsedType)) {
+    filter['types.id'] = {
+      $in: [parsedType],
+    };
+  }
+  return filter;
+}
+
 //List pokemon
 app.get('/pokemon', (request: Request, response: Response) => {
-  const { name } = request.query;
-  var condition = name
-    ? { name: { $regex: new RegExp('^' + name + '$'), $options: 'i' } }
-    : {};
-  Pokemon.find(condition)
+  const { query } = request;
+
+  Pokemon.find(getPokemonFiltersByQueryParams(query))
     .sort({ id: 1 })
     .then((data) => {
       response.send(data);

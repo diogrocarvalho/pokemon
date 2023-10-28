@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import Pokemon from "./pokemon/Pokemon";
 
 const SearchParams = () => {
   const [name, setName] = useState("");
   const [pokemonTypes, setPokemonTypes] = useState([]);
   const [selectedPokemonType, setSelectedPokemonType] = useState("");
+  const [pokemonList, setPokemonList] = useState([]);
 
   useEffect(() => {
     const getTypes = async () => {
@@ -14,6 +16,23 @@ const SearchParams = () => {
     getTypes();
   }, []);
 
+  useEffect(() => {
+    const getPokemon = async () => {
+      const response = await fetch("http://localhost:5000/pokemon");
+      const pokemon = await response.json();
+      setPokemonList(pokemon);
+    };
+    getPokemon();
+  }, []);
+
+  const getPokemon = async () => {
+    const response = await fetch(
+      `http://localhost:5000/pokemon?name=${name}&type=${selectedPokemonType}`
+    );
+    const pokemon = await response.json();
+    setPokemonList(pokemon);
+  };
+
   function onChangeSelectedPokemonType(value) {
     console.log("see", value);
     setSelectedPokemonType(value);
@@ -22,6 +41,7 @@ const SearchParams = () => {
   function onSubmit(e) {
     e.preventDefault();
     console.log("hahah", selectedPokemonType);
+    getPokemon();
   }
 
   return (
@@ -52,6 +72,11 @@ const SearchParams = () => {
 
         <button>Submit</button>
       </form>
+
+      {pokemonList.map((pokemon) => {
+        console.log(pokemon);
+        return <Pokemon key={pokemon.id} props={pokemon} />;
+      })}
     </div>
   );
 };
