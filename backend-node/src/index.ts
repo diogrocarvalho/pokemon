@@ -71,33 +71,43 @@ app.get('/pokemon/:id', (request: Request, response: Response) => {
       if (!data[0]) {
         console.log(`Pokemon ${id} not found...`);
         const url = `${process.env.POKE_API_URL}pokemon/${id}`;
-        console.log(`Trying to get it from remote api`, url);
-        const pokemon = (await axios.get(url)).data;
-        console.log(`${pokemon.name} found!`);
+        console.log(`Trying to get it from the remote API`, url);
 
-        //Mapping types
-        const types = pokemon.types.map((type: any) => {
-          return { name: type.type.name, url: type.type.url };
-        });
-
-        const pkm = new Pokemon({ id: pokemon.id, name: pokemon.name, types });
         try {
-          console.log(`Trying to save ${pokemon.name} on database...`);
+          const pokemon = (await axios.get(url)).data;
+          console.log(`${pokemon.name} found!`);
+
+          // Mapping types
+          const typePromises = pokemon.types.map(async ({ type }: any) => {
+            const t = await PokemonType.findOne({ name: type.name });
+            if (!t) {
+              throw new Error(`Type '${type.name}' not found.`);
+            }
+            return t;
+          });
+
+          // Wait for all type lookups to complete
+          const types = await Promise.all(typePromises);
+          const pkm = new Pokemon({
+            id: pokemon.id,
+            name: pokemon.name,
+            types,
+          });
+          console.log(`Trying to save ${pokemon.name} on the database...`);
           const savedPkm = await pkm.save();
-          console.log(`${pokemon.name} saved on database...`);
+          console.log(`${pokemon.name} saved on the database...`);
           response.send(savedPkm);
-        } catch {
-          throw new Error('cant find pokemon');
+        } catch (error) {
+          console.error('Error:', error);
+          response.status(500).send('Error while processing the request.');
         }
       } else {
         response.send(data);
       }
     })
-    .catch((err) => {
-      response.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving tutorials.',
-      });
+    .catch((error) => {
+      console.error('Error:', error);
+      response.status(500).send('Error while processing the request.');
     });
 });
 
