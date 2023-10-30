@@ -1,20 +1,12 @@
 import { useEffect, useState } from "react";
+import usePokemonTypes from "../hooks/usePokemonTypes";
 import PokemonList from "./pokemon/PokemonList";
 
 const SearchParams = () => {
   const [name, setName] = useState("");
-  const [pokemonTypes, setPokemonTypes] = useState([]);
   const [selectedPokemonType, setSelectedPokemonType] = useState("");
   const [pokemonList, setPokemonList] = useState([]);
-
-  useEffect(() => {
-    const getTypes = async () => {
-      const response = await fetch("http://localhost:5000/type");
-      const types = await response.json();
-      setPokemonTypes(types);
-    };
-    getTypes();
-  }, []);
+  const [pokemonTypes] = usePokemonTypes();
 
   useEffect(() => {
     const getPokemon = async () => {
