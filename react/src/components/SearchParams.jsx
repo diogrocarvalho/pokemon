@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Pokemon from "./pokemon/Pokemon";
+import PokemonList from "./pokemon/PokemonList";
 
 const SearchParams = () => {
   const [name, setName] = useState("");
@@ -34,49 +34,47 @@ const SearchParams = () => {
   };
 
   function onChangeSelectedPokemonType(value) {
-    console.log("see", value);
     setSelectedPokemonType(value);
   }
 
   function onSubmit(e) {
     e.preventDefault();
-    console.log("hahah", selectedPokemonType);
     getPokemon();
   }
 
   return (
     <div className="search-params">
       <form onSubmit={onSubmit}>
-        <label htmlFor="name">Name</label>
-        <input
-          id="name"
-          value={name}
-          placeholder="name"
-          onChange={(e) => setName(e.target.value)}
-        />
+        <span className="input">
+          <label htmlFor="name">Name</label>
+          <input
+            id="name"
+            value={name}
+            placeholder="name"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </span>
+        <span className="input">
+          <label htmlFor="pokemonType">Type</label>
+          <select
+            id="pokemonTypeList"
+            value={selectedPokemonType}
+            placeholder="Select a pokemon type"
+            onChange={(e) => onChangeSelectedPokemonType(e.target.value)}
+          >
+            <option>Select a pokemon type</option>
+            {pokemonTypes.map((type) => (
+              <option key={type._id} value={type.id}>
+                {type.name}
+              </option>
+            ))}
+          </select>
+        </span>
 
-        <label htmlFor="pokemonType">Type</label>
-        <select
-          id="pokemonTypeList"
-          value={selectedPokemonType}
-          placeholder="Select a pokemon type"
-          onChange={(e) => onChangeSelectedPokemonType(e.target.value)}
-        >
-          <option>Select a pokemon type</option>
-          {pokemonTypes.map((type) => (
-            <option key={type._id} value={type.id}>
-              {type.name}
-            </option>
-          ))}
-        </select>
-
-        <button>Submit</button>
+        <button className="btn-submit">Submit</button>
       </form>
 
-      {pokemonList.map((pokemon) => {
-        console.log(pokemon);
-        return <Pokemon key={pokemon.id} props={pokemon} />;
-      })}
+      <PokemonList pokemonList={pokemonList}></PokemonList>
     </div>
   );
 };
