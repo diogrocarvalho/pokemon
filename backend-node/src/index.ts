@@ -128,11 +128,11 @@ app.delete('/pokemon/:id', async (request: Request, response: Response) => {
 });
 
 //
-app.get('/type/:id', (request: Request, response: Response) => {
+app.get('/type/:id', async (request: Request, response: Response) => {
   const id = request.params.id;
   var condition = id ? { id } : {};
 
-  PokemonType.find()
+  PokemonType.find(condition)
     .then(async (data) => {
       if (!data[0]) {
         const url = `${process.env.POKE_API_URL}type`;
@@ -140,11 +140,15 @@ app.get('/type/:id', (request: Request, response: Response) => {
 
         //Mapping types
         try {
-          console.log(types);
+          console.log('types found', types);
           types.forEach(async (type: { name: string; url: string }) => {
+            const url = type.url.split('/');
+            const id: Number = Number(url[url.length - 2]);
+
             const pokemonType = new PokemonType({
               name: type.name,
               url: type.url,
+              id,
             });
             console.log(`trying to save ${type.name} on database...`);
             await pokemonType.save();
