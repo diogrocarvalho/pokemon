@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import usePokemonTypes from "../hooks/usePokemonTypes";
+import styles from "./SearchParams.module.css";
 import PokemonList from "./pokemon/PokemonList";
+import TypePill from "./type-pill/TypePill";
 
 const SearchParams = () => {
   const [name, setName] = useState("");
@@ -37,9 +39,10 @@ const SearchParams = () => {
     setPokemonList(pokemon);
   };
 
-  function onChangeSelectedPokemonType(value) {
-    setSelectedPokemonType(value);
-  }
+  const onChangeSelectedPokemonType = (type) => {
+    console.log("onChangeSelectedPokemonType", type);
+    setSelectedPokemonType(type.id);
+  };
 
   function onSubmit(e) {
     e.preventDefault();
@@ -58,24 +61,16 @@ const SearchParams = () => {
             onChange={(e) => setName(e.target.value)}
           />
         </span>
-        <span className="input">
-          <label htmlFor="pokemonType">Type</label>
-          <select
-            id="pokemonTypeList"
-            value={selectedPokemonType}
-            placeholder="Select a pokemon type"
-            onChange={(e) => onChangeSelectedPokemonType(e.target.value)}
-          >
-            <option>Select a pokemon type</option>
-            {pokemonTypes.map((type) => (
-              <option key={type._id} value={type.id}>
-                {type.name}
-              </option>
-            ))}
-          </select>
-        </span>
 
-        <button className="btn-submit">Submit</button>
+        <div className={styles.types}>
+          {pokemonTypes.map((type) => (
+            <TypePill
+              key={type.id}
+              type={type}
+              onClick={onChangeSelectedPokemonType}
+            />
+          ))}
+        </div>
       </form>
 
       <PokemonList pokemonList={pokemonList}></PokemonList>

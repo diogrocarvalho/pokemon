@@ -1,10 +1,19 @@
 import styles from "./TypePill.module.scss";
 
-const TypePill = ({ type }) => {
+const TypePill = ({ type, onClick }) => {
+  const handleClick = () => {
+    // Call the provided onClick function and pass the type
+    if (onClick) {
+      onClick(type);
+    }
+  };
   return (
-    <div className={`${styles[type.name]} ${styles["type-pill"]} `}>
+    <button
+      onClick={handleClick}
+      className={`${styles[type.name]} ${styles["type-pill"]} `}
+    >
       {type.name}
-    </div>
+    </button>
   );
 };
 
