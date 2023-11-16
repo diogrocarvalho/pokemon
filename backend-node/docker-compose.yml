@@ -1,0 +1,36 @@
+services:
+  backend:
+    build:
+      # Location to the Dockerfile
+      context: .
+      # Name of the Dockerfile
+      dockerfile: Dockerfile
+      # Username for the mongo database
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=diogo
+      # Password for the mongo database
+      - MONGO_INITDB_ROOT_PASSWORD=password_app_pokemon
+    volumes:
+      # ADD THE CONFIGURATION FROM THIS POINT to sync the working directory
+      # for the application to the /app directory in the container
+      # - .:/server:ro
+      - .:/server
+      # - /server/node_modules
+    ports:
+      # External port:Internal port
+      - 5000:5000
+    depends_on:
+      - db
+  db:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=diogo
+      # Password for the mongo database
+      - MONGO_INITDB_ROOT_PASSWORD=password_app_pokemon
+    volumes:
+      - pokemon_db:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+volumes:
+  pokemon_db:
