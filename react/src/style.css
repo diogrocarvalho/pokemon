@@ -20,17 +20,5 @@
 .pokemon-list {
   display: flex;
   flex-wrap: wrap;
-
-  .pokemon {
-    display: flex;
-    width: 33%;
-    margin-top: 5px;
-
-    > a {
-      text-decoration: none;
-      > span {
-        margin-right: 5px;
-      }
-    }
-  }
+  gap: 1em;
 }

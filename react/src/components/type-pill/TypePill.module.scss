@@ -1,0 +1,82 @@
+@import "../../variables.scss";
+
+.type-pill {
+  padding: 5px;
+  border-radius: 5px;
+  min-width: 75px;
+  text-align: center;
+  color: white;
+  font-weight: 600;
+}
+
+.normal {
+  background-color: $normal-type-color;
+}
+
+.fire {
+  background-color: $fire-type-color;
+}
+
+.water {
+  background-color: $water-type-color;
+}
+
+.electric {
+  background-color: $electric-type-color;
+}
+
+.grass {
+  background-color: $grass-type-color;
+}
+
+.ice {
+  background-color: $ice-type-color;
+}
+
+.fighting {
+  background-color: $fighting-type-color;
+}
+
+.poison {
+  background-color: $poison-type-color;
+}
+
+.ground {
+  background-color: $ground-type-color;
+}
+
+.flying {
+  background-color: $flying-type-color;
+}
+
+.psychic {
+  background-color: $psychic-type-color;
+}
+
+.bug {
+  background-color: $bug-type-color;
+}
+
+.rock {
+  background-color: $rock-type-color;
+}
+
+.ghost {
+  background-color: $ghost-type-color;
+}
+
+.dark {
+  background-color: $dark-type-color;
+}
+
+.dragon {
+  background-color: $dragon-type-color;
+}
+
+.steel {
+  background-color: $steel-type-color;
+}
+
+.fairy {
+  background-color: $fairy-type-color;
+}
