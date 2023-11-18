@@ -22,18 +22,6 @@ const SearchParams = () => {
     fetchPokemonList
   );
 
-  /* USED TO CREATE THE 151 FIRST POKEMON ON DB GETTING IT FROM REMOTE IF THEY DON'T EXIST
-  useEffect(() => {
-    const createPokemon = async () => {
-      console.log("creating pokemon 1-151");
-      for (let i = 1; i <= 151; i++) {
-        await fetch("http://localhost:5000/pokemon/" + i);
-      }
-    };
-    createPokemon();
-  }, []);
-  */
-
   const onChangeSelectedPokemonType = (type) => {
     setSelectedPokemonType(type.id);
   };
