@@ -40,7 +40,6 @@ const SearchParams = () => {
   };
 
   const onChangeSelectedPokemonType = (type) => {
-    console.log("onChangeSelectedPokemonType", type);
     setSelectedPokemonType(type.id);
   };
 
