@@ -42,6 +42,7 @@ const SearchParams = () => {
         <div className={styles.types}>
           {pokemonTypes.map((type) => (
             <TypePill
+              selectedType={debouncedType}
               key={type.id}
               type={type}
               onClick={onChangeSelectedPokemonType}
@@ -51,7 +52,10 @@ const SearchParams = () => {
       </form>
       {isLoading ?? <h2>Carregando...</h2>}
       {isError ?? <h2>Error...</h2>}
-      <PokemonList pokemonList={pokemonList}></PokemonList>
+      <PokemonList
+        selectedType={debouncedType}
+        pokemonList={pokemonList}
+      ></PokemonList>
     </div>
   );
 };

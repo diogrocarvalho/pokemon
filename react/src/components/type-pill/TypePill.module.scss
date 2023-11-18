@@ -7,76 +7,51 @@
   text-align: center;
   color: white;
   font-weight: 600;
+
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
 }
 
-.normal {
-  background-color: $normal-type-color;
+// Function to generate type styles
+@mixin type-style($type, $background-color) {
+  .#{$type} {
+    background-color: $background-color;
+    color: #fff;
+    &.active {
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); // Adjust values for your preference
+      transition: box-shadow 0.3s ease; // Add a transition for a smooth effect
+    }
+    &:hover {
+      background-color: lighten($background-color, 10%);
+    }
+  }
 }
 
-.fire {
-  background-color: $fire-type-color;
-}
+// Apply type styles
+@include type-style(normal, $normal-type-color);
+@include type-style(fire, $fire-type-color);
+@include type-style(water, $water-type-color);
+@include type-style(electric, $electric-type-color);
+@include type-style(grass, $grass-type-color);
+@include type-style(ice, $ice-type-color);
+@include type-style(fighting, $fighting-type-color);
+@include type-style(poison, $poison-type-color);
+@include type-style(ground, $ground-type-color);
+@include type-style(flying, $flying-type-color);
+@include type-style(psychic, $psychic-type-color);
+@include type-style(bug, $bug-type-color);
+@include type-style(rock, $rock-type-color);
+@include type-style(ghost, $ghost-type-color);
+@include type-style(dark, $dark-type-color);
+@include type-style(dragon, $dragon-type-color);
+@include type-style(steel, $steel-type-color);
+@include type-style(fairy, $fairy-type-color);
 
-.water {
-  background-color: $water-type-color;
-}
-
-.electric {
-  background-color: $electric-type-color;
-}
-
-.grass {
-  background-color: $grass-type-color;
-}
-
-.ice {
-  background-color: $ice-type-color;
-}
-
-.fighting {
-  background-color: $fighting-type-color;
-}
-
-.poison {
-  background-color: $poison-type-color;
-}
-
-.ground {
-  background-color: $ground-type-color;
-}
-
-.flying {
-  background-color: $flying-type-color;
-}
-
-.psychic {
-  background-color: $psychic-type-color;
-}
-
-.bug {
-  background-color: $bug-type-color;
-}
-
-.rock {
-  background-color: $rock-type-color;
-}
-
-.ghost {
-  background-color: $ghost-type-color;
-}
-
-.dark {
-  background-color: $dark-type-color;
-}
-
-.dragon {
-  background-color: $dragon-type-color;
-}
-
-.steel {
-  background-color: $steel-type-color;
-}
-
-.fairy {
-  background-color: $fairy-type-color;
+.unknown,
+.shadow {
+  color: black;
+  border: 1px dashed #ededed;
 }
