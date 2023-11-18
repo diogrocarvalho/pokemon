@@ -1,5 +1,8 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useDebounce } from "use-debounce";
 import usePokemonTypes from "../hooks/usePokemonTypes";
+import fetchPokemonList from "../queries/fetchPokemonList";
 import styles from "./SearchParams.module.css";
 import PokemonList from "./pokemon/PokemonList";
 import TypePill from "./type-pill/TypePill";
@@ -7,17 +10,17 @@ import TypePill from "./type-pill/TypePill";
 const SearchParams = () => {
   const [name, setName] = useState("");
   const [selectedPokemonType, setSelectedPokemonType] = useState("");
-  const [pokemonList, setPokemonList] = useState([]);
   const [pokemonTypes] = usePokemonTypes();
-
-  useEffect(() => {
-    const getPokemon = async () => {
-      const response = await fetch("http://localhost:5000/pokemon");
-      const pokemon = await response.json();
-      setPokemonList(pokemon);
-    };
-    getPokemon();
-  }, []);
+  const [debouncedName] = useDebounce(name, 300);
+  const [debouncedType] = useDebounce(selectedPokemonType, 300);
+  const {
+    isLoading,
+    isError,
+    data: pokemonList,
+  } = useQuery(
+    [`pokemonList`, { name: debouncedName, type: debouncedType }],
+    fetchPokemonList
+  );
 
   /* USED TO CREATE THE 151 FIRST POKEMON ON DB GETTING IT FROM REMOTE IF THEY DON'T EXIST
   useEffect(() => {
@@ -31,26 +34,13 @@ const SearchParams = () => {
   }, []);
   */
 
-  const getPokemon = async () => {
-    const response = await fetch(
-      `http://localhost:5000/pokemon?name=${name}&type=${selectedPokemonType}`
-    );
-    const pokemon = await response.json();
-    setPokemonList(pokemon);
-  };
-
   const onChangeSelectedPokemonType = (type) => {
     setSelectedPokemonType(type.id);
   };
 
-  function onSubmit(e) {
-    e.preventDefault();
-    getPokemon();
-  }
-
   return (
     <div className="search-params">
-      <form onSubmit={onSubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <span className="input">
           <label htmlFor="name">Name</label>
           <input
@@ -71,7 +61,8 @@ const SearchParams = () => {
           ))}
         </div>
       </form>
-
+      {isLoading ?? <h2>Carregando...</h2>}
+      {isError ?? <h2>Error...</h2>}
       <PokemonList pokemonList={pokemonList}></PokemonList>
     </div>
   );
