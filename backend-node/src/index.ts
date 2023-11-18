@@ -6,6 +6,7 @@ import { Pokemon } from './model/pokemon.js';
 import axios from 'axios';
 import cors from 'cors';
 import { FilterQuery } from 'mongoose';
+import { Image } from './model/image.js';
 import { PokemonType } from './model/pokemonType.js';
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -127,7 +128,39 @@ app.delete('/pokemon/:id', async (request: Request, response: Response) => {
   }
 });
 
-//
+app.get(`/pokemon/image/:id`, async (request: Request, response: Response) => {
+  try {
+    const id = parseInt(request.params.id);
+    if (!id) {
+      throw new Error(`You need to provide the pokemon number`);
+    }
+    const parsedNumber = String(id).padStart(3, '0');
+    const imageFound = await Image.findOne({ pokemonNumber: parsedNumber });
+
+    if (imageFound) {
+      response.set('Content-Type', imageFound.contentType);
+      return response.send(imageFound.data);
+    }
+
+    const imageUrl = `https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${parsedNumber}.png`;
+    const imageResponse = await axios.get(imageUrl, {
+      responseType: 'arraybuffer',
+    });
+
+    const newImage = new Image({
+      data: Buffer.from(imageResponse.data, 'binary'),
+      contentType: imageResponse.headers['content-type'],
+      pokemonNumber: parsedNumber,
+    });
+
+    await newImage.save();
+    response.set('Content-Type', newImage.contentType);
+    response.send(newImage.data);
+  } catch (error) {
+    response.status(500).send('You need to provide a valid pokemon number');
+  }
+});
+
 app.get('/type/:id', async (request: Request, response: Response) => {
   const id = request.params.id;
   var condition = id ? { id } : {};
