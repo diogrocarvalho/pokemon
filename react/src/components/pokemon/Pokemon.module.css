@@ -4,6 +4,7 @@
   padding: 8px;
   display: flex;
   justify-content: space-evenly;
+  position: relative;
 
   > a {
     text-decoration: none;
@@ -11,23 +12,22 @@
     width: 100%;
     display: flex;
     gap: 0.3em;
-    .type {
-      border: 1px solid #471a1a;
-      border-radius: 8px;
-      padding: 5px;
-      margin-right: 5px;
-      &.fighting {
-        background-color: rgb(102, 40, 40);
-        color: white;
-      }
-      &.water {
-        background-color: blue;
-        color: white;
-      }
-      &.electric {
-        background-color: yellow;
-        color: black;
-      }
+    flex-direction: column;
+    .number {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: black;
+      border-radius: 10%;
+      padding: 5px 10px;
+      color: white;
+    }
+    .name {
+      text-align: center;
+      text-transform: capitalize;
+
+      font-size: 1.3rem;
+      font-weight: 600;
     }
   }
 }

@@ -18,9 +18,10 @@ const Pokemon = ({ pokemon }) => {
     <div className={style.pokemon}>
       <Link to={`/pokemon/${pokemon.id}`}>
         <img src={pokemonImage} alt={`${pokemon.name}`} />
-
-        <span>{pokemon.id}</span>
-        <span>{pokemon.name}</span>
+        <span className={style.number}>
+          # {pokemon.id.toString().padStart(3, "0")}
+        </span>
+        <span className={style.name}>{pokemon.name}</span>
         {pokemon.types.map((type) => {
           return <TypePill key={type.id} type={type} />;
         })}
