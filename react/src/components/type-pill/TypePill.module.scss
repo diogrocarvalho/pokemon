@@ -1,0 +1,57 @@
+@import "../../variables.scss";
+
+.type-pill {
+  padding: 5px;
+  border-radius: 5px;
+  min-width: 75px;
+  text-align: center;
+  color: white;
+  font-weight: 600;
+
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+// Function to generate type styles
+@mixin type-style($type, $background-color) {
+  .#{$type} {
+    background-color: $background-color;
+    color: #fff;
+    &.active {
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); // Adjust values for your preference
+      transition: box-shadow 0.3s ease; // Add a transition for a smooth effect
+    }
+    &:hover {
+      background-color: lighten($background-color, 10%);
+    }
+  }
+}
+
+// Apply type styles
+@include type-style(normal, $normal-type-color);
+@include type-style(fire, $fire-type-color);
+@include type-style(water, $water-type-color);
+@include type-style(electric, $electric-type-color);
+@include type-style(grass, $grass-type-color);
+@include type-style(ice, $ice-type-color);
+@include type-style(fighting, $fighting-type-color);
+@include type-style(poison, $poison-type-color);
+@include type-style(ground, $ground-type-color);
+@include type-style(flying, $flying-type-color);
+@include type-style(psychic, $psychic-type-color);
+@include type-style(bug, $bug-type-color);
+@include type-style(rock, $rock-type-color);
+@include type-style(ghost, $ghost-type-color);
+@include type-style(dark, $dark-type-color);
+@include type-style(dragon, $dragon-type-color);
+@include type-style(steel, $steel-type-color);
+@include type-style(fairy, $fairy-type-color);
+
+.unknown,
+.shadow {
+  color: black;
+  border: 1px dashed #ededed;
+}

@@ -1,0 +1,10 @@
+.search {
+}
+.types {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  width: 360px;
+}

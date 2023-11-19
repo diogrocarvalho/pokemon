@@ -1,5 +1,24 @@
 .search-params {
   > form {
     display: flex;
+    margin: 15px auto;
+    .input {
+      display: flex;
+      flex-direction: column;
+      padding-right: 5px;
+      > label {
+        margin-bottom: 5px;
+      }
+    }
+
+    .btn-submit {
+      align-self: flex-end;
+    }
   }
+}
+
+.pokemon-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
 }
